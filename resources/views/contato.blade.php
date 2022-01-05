@@ -27,7 +27,7 @@
         // Aqui pode ser atribuido qualquer featura que ainda o blade do laravel ainda não da
     @endphp
 
-    <a href="/">Voltar para Home</a>
+    <a href="/welcome">Ir para o welcome do Laravel</a>
 
        
    @endsection

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EventoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SeriesController;
 use Illuminate\Support\Arr;
@@ -15,13 +16,9 @@ use Illuminate\Support\Arr;
 |
 */
 
-Route::get('/', function(){
+Route::get('/welcome', function(){
     return view('welcome');
 });
 
-Route::get('/contato', function () {
-
-    $arr = [10,20,30,40,50];
-
-    return view('contato',['numero'=>8,'arr'=>$arr,'nome'=>'Eduardo']);
-});
+Route::get('/',[EventoController::class,'index']);
+Route::get('/eventos/criar',[EventoController::class,'criar']);
