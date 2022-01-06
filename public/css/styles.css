@@ -107,7 +107,7 @@ header {
 }
 
 #eventos-container .card {
-    flex: 1 1 0;
+    flex: 1 1 24%;
     max-width: 25%;
     border-radius: 10px;
     padding: 0px;
@@ -153,6 +153,54 @@ header {
     font-size: 12px;
     margin: 5px 0;
 }
+
+/* evento de confirmação */
+#imagem-container,
+#info-container{
+    margin-top:30px;
+}
+
+#imagem-container img{
+ border-radius: 10px;
+}
+
+#info-container h1{
+    font-size: 36px;
+    font-weight: 900;
+}
+
+#info-container p{
+    margin:0;
+    font-size: 14px;
+    display: flex;
+}
+
+#info-container h3,
+#descricao-container h3{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#info-container ion-icon{
+    font-size: 20px;
+    color:#F2A340;
+    margin-right: 5px;
+}
+
+#info-container #evento-submit{
+    margin: 20px 0;
+}
+
+#items-lista{
+    list-style: none;
+    padding-left: 0;
+
+}
+
+#items-lista li{
+    display:flex;
+}
+
 
 /* footer */
 

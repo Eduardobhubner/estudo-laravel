@@ -22,8 +22,8 @@ Route::get('/welcome', function(){
 
 Route::get('/',[EventoController::class,'index']);
 Route::get('/eventos/criar',[EventoController::class,'criar']);
+Route::get('/eventos/{id}',[EventoController::class,'show']);
 
 // requisição post
-
 // store = convencionado para logica de adição de dados 
 Route::post('/eventos/criar',[EventoController::class,'store']);
