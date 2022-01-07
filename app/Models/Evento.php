@@ -15,4 +15,9 @@ class Evento extends Model
 
     protected $datas = ['date'];
 
+    public function user(){
+        // pertence a apenas um usuário   
+        return $this->belongsTo('App\Models\User');
+    }
+
 }

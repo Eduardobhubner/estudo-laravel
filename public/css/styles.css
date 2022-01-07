@@ -181,6 +181,10 @@ header {
     font-weight: bold;
 }
 
+#descricao-container{
+    margin-top:30px;
+}
+
 #info-container ion-icon{
     font-size: 20px;
     color:#F2A340;
@@ -200,6 +204,22 @@ header {
 #items-lista li{
     display:flex;
 }
+
+/* dashboard-container */
+
+.dashboard-title-container{
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.dashboard-title-container th{
+    width: 25%;
+}
+
+.dashboard-title-container form{
+    display: inline-block;
+}
+
 
 
 /* footer */

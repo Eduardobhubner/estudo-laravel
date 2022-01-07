@@ -28,12 +28,32 @@
                     <li class="navbar-item">
                         <a href="/eventos/criar" class="nav-link">Criar eventos</a>
                     </li>
-                    <li class="navbar-item">
-                        <a href="/" class="nav-link">Entrar</a>
-                    </li>
-                    <li class="navbar-item">
-                        <a href="/" class="nav-link">Cadastrar</a>
-                    </li>
+                    {{-- @guest, remove conteudo caso seja autenticado --}}
+                    @guest
+                        <li class="navbar-item">
+                            <a href="/login" class="nav-link">Entrar</a>
+                        </li>
+                        <li class="navbar-item">
+                            <a href="/register" class="nav-link">Cadastrar</a>
+                        </li>
+                    @endguest
+                    {{-- @auth, mostra conteudo caso seja autenticado --}}
+                    @auth
+                        <li class="navbar-item">
+                            <a href="/dashboard" class="nav-link">meus eventos</a>
+                        </li>
+                        <li class="navbar-item">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <a href="{{ route('logout') }}" class="nav-link" 
+                                onclick="event.preventDefault();
+                                this.closest('form').submit();">
+                                {{ __('Sair') }}
+                                </a>
+                            </form>
+                        </li>
+                    @endauth
+
                 </ul>
             </div>
         </nav>
@@ -43,7 +63,7 @@
         <div class="container-fluid">
             <div class="row">
                 @if (session('msg'))
-                    <p class="msg">{{session('msg')}}</p>
+                    <p class="msg">{{ session('msg') }}</p>
                 @endif
                 @yield('content')
             </div>

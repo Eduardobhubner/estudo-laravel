@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 
 // Ter acesso ao controle de model - eventos
 
-use App\Models\Evento;
 use Illuminate\Console\Scheduling\Event;
+use App\Models\Evento;
+use App\Models\User;
+
 
 class EventoController extends Controller
 {
@@ -20,7 +22,7 @@ class EventoController extends Controller
         if ($search) {
             // Vai procurar se contem a palavra que a gente procurou no titulo
             $eventos = Evento::where([
-                ['title', 'like', '%'.$search.'%']
+                ['title', 'like', '%' . $search . '%']
             ])->get();
         } else {
             $eventos = Evento::all();
@@ -63,8 +65,13 @@ class EventoController extends Controller
             $evento->imagem = $imagemNome;
         }
 
+        $user = auth()->user();
+        $evento->user_id = $user->id;
+
         // função para salvar o objeto instanciado no bd
         $evento->save();
+
+
 
         // retorna para a rota junto com uma mensagem(key=value)
         return redirect('/')->with('msg', 'Evento criado com sucesso!');
@@ -75,6 +82,34 @@ class EventoController extends Controller
 
         $evento = Evento::findOrFail($id);
 
-        return view('eventos.show', ['evento' => $evento]);
+        //first = primeiro usuário que econtrar, toArray = transformar em array
+        $eventOwner = user::where('id', '=', $evento->user_id)->first()->toArray();
+
+        return view('eventos.show', ['evento' => $evento, 'eventOwner' => $eventOwner]);
+    }
+
+    public function dashboard(){
+
+        $user = auth()->user(); 
+
+        $eventos = $user->eventos;
+
+        return view('eventos/dashboard', ['eventos'=>$eventos]);
+    }
+
+    public function destroy($id){
+        // Encontrar id e remover id do bd
+        Evento::FindOrFail($id)->delete();
+
+        return redirect('dashboard')->with('msg', 'Evento excluido com sucesso!!');
+
+    }
+
+    public function edit($id){
+
+        // Encontrar evento que foi passado do front para o back e consultar no bd
+        $event = Evento::findOrFail($id);
+
+        return view('eventos.editar',['evento'=>$event]);
     }
 }
