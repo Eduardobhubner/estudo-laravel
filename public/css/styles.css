@@ -43,6 +43,15 @@ header {
     padding: 10px;
 }
 
+.already-joined-msg{
+    margin: 15px 0;
+    color: #004085;
+    background-color: #CCE5FF;
+    border: 1px solid #88DAFF;
+    padding: 10px;
+    width: 275px;
+}
+
 /* navbar */
 
 #navbar img {
@@ -212,11 +221,11 @@ header {
     margin-top: 30px;
 }
 
-.dashboard-title-container th{
+.dashboard-eventos-container th{
     width: 25%;
 }
 
-.dashboard-title-container form{
+.dashboard-eventos-container form{
     display: inline-block;
 }
 

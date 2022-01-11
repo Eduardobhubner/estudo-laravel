@@ -7,7 +7,7 @@
     <div class="offset-md-3 col-md-6" id="evento-criar-container">
         <h1>Editando o evento: {{ $evento->title }}</h1>
         {{-- enctype="multipart/form-data" = possibilita enviar arquivos por form --}}
-        <form action="/eventos/update/{$evento->id}" method="POST" enctype="multipart/form-data">
+        <form action="/eventos/update/{{$evento->id}}" method="POST" enctype="multipart/form-data">
             {{-- prevenção de ataques a formulários --}}
             @csrf
             {{-- PUT = Indica que vai ser um update --}}
@@ -15,34 +15,35 @@
             <div class="form-group">
                 <img src="/img/events/{{ $evento->imagem }}" alt="{{ $evento->title }}" class="img-preview img-fluid">
                 <hr>
-                <label for="image">Nova imagem do evento:</label>
-                <input type="file" name="image" id="image" class="form-control-file">
+                <label for="imagem">Nova imagem do evento:</label>
+                <input type="file" name="imagem" id="imagem" class="form-control-file">
             </div>
             <div class="form-group">
                 <label for="titulo">Evento:</label>
-                <input type="text" name="titulo" id="titulo" class="form-control" placeholder="Nome do evento"
+                <input type="text" name="title" id="title" class="form-control" placeholder="Nome do evento"
                     value="{{ $evento->title }}">
             </div>
             <div class="form-group">
                 <label for="data">Data do evento:</label>
                 <input type="date" name="data" id="data" class="form-control" placeholder="Nome do evento"
-                    value="">
+                    value="{{ date('Y-m-d', strtotime($evento->data))}}">
             </div>
             <div class="form-group">
                 <label for="cidade">Cidade:</label>
-                <input type="text" name="cidade" id="cidade" class="form-control" placeholder="Nome da cidade">
+                <input type="text" name="cidade" id="cidade" class="form-control" placeholder="Nome da cidade"
+                value="{{$evento->cidade}}">
             </div>
             <div class="form-group">
                 <label for="privado">Privado:</label>
                 <select type="text" name="privado" id="privado" class="form-control">
                     <option value="0">Não</option>
-                    <option value="1">Sim</option>
+                    <option value="1" {{$evento->privado == 1? "selected='selected'" : ""}}>Sim</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="descricao">Descrição:</label>
                 <textarea type="text" name="descricao" id="descricao" class="form-control" rows="5"
-                    placeholder="falar sobre o evento"></textarea>
+                    placeholder="falar sobre o evento">{{$evento->descricao}}</textarea>
             </div>
             <div class="form-group">
                 <label for="items">idicione items de infraestrutura:</label>
@@ -62,7 +63,7 @@
                     <input type="checkbox" name="items[]" value="brindes">Brindes
                 </div>
             </div>
-            <input type="submit" class="btn btn-primary" value="Criar evento">
+            <input type="submit" class="btn btn-primary" value="Editar evento">
         </form>
     </div>
 

@@ -82,34 +82,107 @@ class EventoController extends Controller
 
         $evento = Evento::findOrFail($id);
 
+        $user = auth()->user();
+        $hasUserJoin = false;
+
+        if ($user) {
+            $userEvents = $user->eventosComoParticipante->toArray();
+
+            foreach($userEvents as $userEvent){
+                if($userEvent['id'] == $id){
+                    $hasUserJoin = true;
+                }
+            }
+        }
+
         //first = primeiro usuário que econtrar, toArray = transformar em array
         $eventOwner = user::where('id', '=', $evento->user_id)->first()->toArray();
 
-        return view('eventos.show', ['evento' => $evento, 'eventOwner' => $eventOwner]);
+        return view('eventos.show', ['evento' => $evento, 'eventOwner' => $eventOwner, 'hasUserJoin' => $hasUserJoin]);
     }
 
-    public function dashboard(){
+    public function dashboard()
+    {
 
-        $user = auth()->user(); 
+        $user = auth()->user();
 
         $eventos = $user->eventos;
 
-        return view('eventos/dashboard', ['eventos'=>$eventos]);
+        $eventoComoParticipante = $user->eventosComoParticipante;
+
+        return view('eventos/dashboard', [
+            'eventos' => $eventos,
+            'eventosComoParticipante' => $eventoComoParticipante
+        ]);
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         // Encontrar id e remover id do bd
         Evento::FindOrFail($id)->delete();
 
         return redirect('dashboard')->with('msg', 'Evento excluido com sucesso!!');
-
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
 
+        $user = auth()->user();
         // Encontrar evento que foi passado do front para o back e consultar no bd
         $event = Evento::findOrFail($id);
 
-        return view('eventos.editar',['evento'=>$event]);
+        if ($user->id != $event->user_id) {
+            return redirect('dashboard')->with('msg', 'não é possível editar evento de terceiro');
+        }
+
+        return view('eventos.editar', ['evento' => $event]);
+    }
+
+    public function update(Request $request)
+    {
+        $dados = $request->all();
+
+        // receber arquivo do form
+        if ($request->hasFile('imagem') && $request->file('imagem')->isValid()) {
+            // recebe imagem
+            $requestImagem = $request->imagem;
+            // recebe extensão do arquivo
+            $extension = $requestImagem->extension();
+            // cripgrafa nome com tech md5 e contatena com a extensão
+            $imagemNome = md5($requestImagem->getClientOriginalName() . strtotime("now")) . "." . $extension;
+            // salva na pasta 
+            $requestImagem->move(public_path('img/events'), $imagemNome);
+            // adiciona ao objeto instanciado do modelo
+            $dados['imagem'] = $imagemNome;
+        }
+
+        // Encontrar id e faz o update id do bd
+        Evento::FindOrFail($request->id)->update($dados);
+
+        return redirect('dashboard')->with('msg', 'Evento Editado com sucesso!!');
+    }
+
+    public function confirmarEvento($id)
+    {
+
+        $user = auth()->user();
+
+        $user->eventosComoParticipante()->attach($id);
+
+        $evento = Evento::findOrFail($id);
+
+        return redirect('/dashboard')->with('msg', 'Sua presença foi confirmada para o evento: ' . $evento->title);
+    }
+
+    public function sairEvento($id)
+    {
+
+        $user = auth()->user();
+
+        $user->eventosComoParticipante()->detach($id);
+
+        $evento = Evento::findOrFail($id);
+
+        return redirect('/dashboard')->with('msg', 'Você saiu com sucesso do evento: ' . $evento->title);
     }
 }
